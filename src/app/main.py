@@ -27,7 +27,7 @@ def treinar():
         X, y, test_size=0.3, random_state=42)
     novo_modelo = LinearRegression()
     novo_modelo.fit(X_train, y_train)
-    pickle.dump(novo_modelo, open('modelo.sav','wb'))
+    pickle.dump(novo_modelo, open('../../models/modelo.sav','wb'))
 
     return "Modelo gerado com sucesso!"
 
