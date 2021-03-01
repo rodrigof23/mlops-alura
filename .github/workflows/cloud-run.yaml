@@ -19,7 +19,7 @@ on:
 
 name: Build and Deploy to Cloud Run
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  PROJECT_ID: mlops-deploy-alura
   SERVICE: ml-api
   REGION: us-central1
   BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
@@ -37,8 +37,6 @@ jobs:
       with:
         project_id: $PROJECT_ID
         service_account_key: ${{ secrets.GCP_SA_KEY }}
-      run: |-
-        gcloud config set project mlops-deploy-alura
 
     - name: Authorize Docker push
       run: gcloud auth configure-docker
