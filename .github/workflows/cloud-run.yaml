@@ -19,11 +19,8 @@ on:
 
 name: Build and Deploy to Cloud Run
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   SERVICE: ml-api
   REGION: us-central1
-  BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
-  BASIC_AUTH_PASSWORD: ${{ secrets.BASIC_AUTH_PASSWORD }}
 
 jobs:
   deploy:
@@ -46,13 +43,13 @@ jobs:
         gcloud builds submit \
           --quiet \
           --config cloudbuild.yaml \
-          --substitutions _BASIC_AUTH_USERNAME=$BASIC_AUTH_USERNAME,_BASIC_AUTH_PASSWORD=$BASIC_AUTH_PASSWORD,_IMAGE_TAG=gcr.io/$PROJECT_ID/$SERVICE:${{  github.sha }}
+          --substitutions _BASIC_AUTH_USERNAME=${{ secrets.BASIC_AUTH_USERNAME }},_BASIC_AUTH_PASSWORD=${{ secrets.BASIC_AUTH_PASSWORD }},_IMAGE_TAG=gcr.io/${{ secrets.GCP_PROJECT }}/${{ env.SERVICE }}:${{  github.sha }}
         
     - name: Deploy to Cloud Run
       run: |-
-        gcloud run deploy $SERVICE \
-          --region $REGION \
-          --image gcr.io/$PROJECT_ID/$SERVICE:${{  github.sha }} \
+        gcloud run deploy ${{ env.SERVICE }} \
+          --region ${{ env.REGION }} \
+          --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ env.SERVICE }}:${{  github.sha }} \
           --platform "managed" \
           --quiet \
           --allow-unauthenticated \
