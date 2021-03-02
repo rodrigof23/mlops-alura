@@ -19,7 +19,7 @@ on:
 
 name: Build and Deploy to Cloud Run
 env:
-  PROJECT_ID: mlops-deploy-alura
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   SERVICE: ml-api
   REGION: us-central1
   BASIC_AUTH_USERNAME: ${{ secrets.BASIC_AUTH_USERNAME }}
@@ -35,7 +35,7 @@ jobs:
     - name: Setup Cloud SDK
       uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        project_id: $PROJECT_ID
+        project_id: ${{ env.PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
 
     - name: Authorize Docker push
